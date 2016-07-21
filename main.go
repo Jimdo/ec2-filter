@@ -32,7 +32,7 @@ func main() {
 
 		format  = flag.String("format", "{{.PrivateIpAddress}}", "alternate format in Go template syntax")
 		joinStr = flag.String("join", "\n", "separator string for concatenating results")
-		limit   = flag.Int("limit", -1, "limit number of results")
+		limit   = flag.Int("limit", 0, "limit number of results")
 	)
 	flag.Parse()
 
