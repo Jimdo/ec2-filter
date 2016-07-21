@@ -1,10 +1,22 @@
 # ec2-filter
 
-A small command-line utility to discover EC2 instances and output information
-like their private IP address, DNS name, etc.
+A command-line utility to discover EC2 instances and output information like
+their private IP address, DNS name, etc.
 
 Inspired by `aws ec2 describe-instances --filters` but easier to deploy and use
 for service discovery in scripts.
+
+## Installation
+
+The easiest way to install ec2-filter is to download one of the pre-built
+binaries from the [Releases page](https://github.com/Jimdo/ec2-filter/releases).
+
+Alternatively, you can build the tool from source, provided you have Go
+installed:
+
+```bash
+go get -u github.com/Jimdo/ec2-filter
+```
 
 ## Usage
 
