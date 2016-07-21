@@ -32,6 +32,7 @@ func main() {
 
 		format  = flag.String("format", "{{.PrivateIpAddress}}", "alternate format in Go template syntax")
 		joinStr = flag.String("join", "\n", "separator string for concatenating results")
+		limit   = flag.Int("limit", -1, "limit number of results")
 	)
 	flag.Parse()
 
@@ -83,7 +84,11 @@ func main() {
 
 	if len(lines) > 0 {
 		sort.Strings(lines)
-		fmt.Println(strings.Join(lines, *joinStr))
+		maxLines := len(lines)
+		if *limit > 0 && *limit < maxLines {
+			maxLines = *limit
+		}
+		fmt.Println(strings.Join(lines[:maxLines], *joinStr))
 	}
 }
 
