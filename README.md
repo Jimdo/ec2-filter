@@ -37,3 +37,17 @@ ec2-filter -format '{{.PrivateIpAddress}}:80' -join " " tag:foo=bar
 ```
 
 Invoke `ec2-filter -h` for a list of all available options.
+
+## Examples from our codebase
+
+Run a command on all EC2 instances that are part of our Crims cluster:
+
+```
+pssh -H "$(ec2-filter -join " " tag:jimdo:cluster=crims)" ...
+```
+
+Find the endpoint of one Nomad client:
+
+```
+NOMAD_ADDR=$(ec2-filter -limit 1 -format 'http://{{.PrivateIpAddress}}:8080' tag:jimdo:cluster=nomad-client)
+```
