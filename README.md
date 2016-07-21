@@ -29,7 +29,7 @@ ec2-filter -join " "
 # Limit the number of results, e.g. to only get a single IP
 ec2-filter -limit 1
 
-# Use custom format string to print addtional information, e.g. service port
+# Use custom format string to print additional information, e.g. service port
 ec2-filter -format '{{.PrivateIpAddress}}:80'
 
 # Combine the presented features
