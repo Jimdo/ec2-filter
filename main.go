@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
+	"io"
 	"os"
 	"sort"
 	"strings"
@@ -33,6 +34,7 @@ func main() {
 		format  = flag.String("format", "{{.PrivateIpAddress}}", "alternate format in Go template syntax")
 		joinStr = flag.String("join", "\n", "separator string for concatenating results")
 		limit   = flag.Int("limit", 0, "limit number of results")
+		output  = flag.String("output", "", "write results to given file")
 	)
 	flag.Parse()
 
@@ -82,13 +84,23 @@ func main() {
 		}
 	}
 
+	var w io.Writer = os.Stdout
+	if *output != "" {
+		f, err := os.Create(*output)
+		if err != nil {
+			abort("%s", err)
+		}
+		defer f.Close()
+		w = f
+	}
+
 	if len(lines) > 0 {
 		sort.Strings(lines)
 		maxLines := len(lines)
 		if *limit > 0 && *limit < maxLines {
 			maxLines = *limit
 		}
-		fmt.Println(strings.Join(lines[:maxLines], *joinStr))
+		fmt.Fprintln(w, strings.Join(lines[:maxLines], *joinStr))
 	}
 }
 
