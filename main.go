@@ -31,10 +31,10 @@ func main() {
 		showPublicDNS  = flag.Bool("public-dns", false, "show public DNS name")
 		showPublicIP   = flag.Bool("public-ip", false, "show public IP address")
 
-		format  = flag.String("format", "{{.PrivateIpAddress}}", "alternate format in Go template syntax")
-		joinStr = flag.String("join", "\n", "separator string for concatenating results")
-		limit   = flag.Int("limit", 0, "limit number of results")
-		output  = flag.String("output", "", "write results to given file")
+		format = flag.String("format", "{{.PrivateIpAddress}}", "alternate format in Go template syntax")
+		join   = flag.String("join", "\n", "separator string for concatenating results")
+		limit  = flag.Int("limit", 0, "limit number of results")
+		output = flag.String("output", "", "write results to given file")
 	)
 	flag.Parse()
 
@@ -68,7 +68,7 @@ func main() {
 		filters[parts[0]] = parts[1]
 	}
 
-	instances, err := ec2Instances(filters)
+	instances, err := findInstances(filters)
 	if err != nil {
 		abort("%s", err)
 	}
@@ -100,11 +100,11 @@ func main() {
 		if *limit > 0 && *limit < maxLines {
 			maxLines = *limit
 		}
-		fmt.Fprintln(w, strings.Join(lines[:maxLines], *joinStr))
+		fmt.Fprintln(w, strings.Join(lines[:maxLines], *join))
 	}
 }
 
-func ec2Instances(filters map[string]string) ([]EC2Instance, error) {
+func findInstances(filters map[string]string) ([]EC2Instance, error) {
 	var ec2Filters []*ec2.Filter
 	for k, v := range filters {
 		ec2Filters = append(ec2Filters, &ec2.Filter{
