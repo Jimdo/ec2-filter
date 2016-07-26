@@ -8,8 +8,15 @@ for service discovery in scripts.
 
 ## Installation
 
-The easiest way to install ec2-filter is to download one of the pre-built
-binaries from the [Releases page](https://github.com/Jimdo/ec2-filter/releases).
+If you're on Mac OS X, the easiest way to install ec2-filter is via Homebrew:
+
+```bash
+brew tap mlafeldt/formulas
+brew install ec2-filter
+```
+
+For server deployments, the best way to get ec2-filter is to download one of the
+pre-built binaries from the [Releases page](https://github.com/Jimdo/ec2-filter/releases).
 
 Alternatively, you can build the tool from source, provided you have Go
 installed:
