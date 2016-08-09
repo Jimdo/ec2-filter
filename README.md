@@ -61,12 +61,13 @@ Invoke `ec2-filter -h` for a list of all available options.
 
 Run a command on all EC2 instances that are part of our Crims cluster:
 
-```
+```bash
 pssh -H "$(ec2-filter -join " " tag:jimdo:cluster=crims)" ...
 ```
 
-Find the endpoint of one Nomad client:
+Find the endpoint of one Nomad server:
 
-```
-NOMAD_ADDR=$(ec2-filter -limit 1 -format 'http://{{.PrivateIpAddress}}:8080' tag:jimdo:cluster=nomad-client)
+```bash
+export NOMAD_ADDR=$(ec2-filter -limit 1 -format 'http://{{.PrivateIpAddress}}:4646' tag:jimdo:cluster=nomad-server)
+nomad node-status
 ```
