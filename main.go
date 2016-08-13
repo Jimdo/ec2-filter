@@ -132,7 +132,7 @@ func findInstances(filters map[string]string) ([]EC2Instance, error) {
 		return !last
 	}
 
-	svc := ec2.New(sessionWithTimeout(10 * time.Second))
+	svc := ec2.New(sessionWithTimeout(30 * time.Second))
 	if err := svc.DescribeInstancesPages(&ec2.DescribeInstancesInput{Filters: ec2Filters}, fn); err != nil {
 		return nil, err
 	}
