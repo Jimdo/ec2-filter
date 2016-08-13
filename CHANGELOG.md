@@ -1,3 +1,10 @@
+## v0.1.0 (unreleased)
+
+* Set timeout of 10 seconds on EC2 instance lookup.
+* Properly sort IP addresses in output.
+* README: Document installation via Homebrew.
+* README: Update Nomad example.
+
 ## v0.0.3 (2016-07-22)
 
 * Allow to write results to file specified by `-output`.
