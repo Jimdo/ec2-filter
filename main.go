@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"net"
 	"net/http"
 	"os"
 	"sort"
@@ -97,7 +98,7 @@ func main() {
 	}
 
 	if len(lines) > 0 {
-		sort.Strings(lines)
+		sort.Sort(Lines(lines))
 		maxLines := len(lines)
 		if *limit > 0 && *limit < maxLines {
 			maxLines = *limit
@@ -147,3 +148,16 @@ func abort(format string, a ...interface{}) {
 	fmt.Fprintf(os.Stderr, "error: "+format+"\n", a...)
 	os.Exit(1)
 }
+
+type Lines []string
+
+func (l Lines) Len() int { return len(l) }
+func (l Lines) Less(i, j int) bool {
+	// Compare octets if lines are IP addresses
+	if a, b := net.ParseIP(l[i]), net.ParseIP(l[j]); a != nil && b != nil {
+		return bytes.Compare(a, b) < 0
+	}
+	// Otherwise, use string comparison
+	return l[i] < l[j]
+}
+func (l Lines) Swap(i, j int) { l[i], l[j] = l[j], l[i] }
