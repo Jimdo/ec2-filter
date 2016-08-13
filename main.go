@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"net/http"
 	"os"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -129,12 +131,16 @@ func findInstances(filters map[string]string) ([]EC2Instance, error) {
 		return !last
 	}
 
-	svc := ec2.New(session.New())
+	svc := ec2.New(sessionWithTimeout(10 * time.Second))
 	if err := svc.DescribeInstancesPages(&ec2.DescribeInstancesInput{Filters: ec2Filters}, fn); err != nil {
 		return nil, err
 	}
 
 	return instances, nil
+}
+
+func sessionWithTimeout(timeout time.Duration) *session.Session {
+	return session.New(aws.NewConfig().WithHTTPClient(&http.Client{Timeout: timeout}))
 }
 
 func abort(format string, a ...interface{}) {
