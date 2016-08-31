@@ -1,9 +1,10 @@
-## v0.1.0 (unreleased)
+## v0.1.0 (2016-08-31)
 
 * Set timeout of 30 seconds on EC2 instance lookup.
 * Properly sort IP addresses in output.
 * README: Document installation via Homebrew.
 * README: Update Nomad example.
+* Build and deploy project with Travis CI.
 
 ## v0.0.3 (2016-07-22)
 
