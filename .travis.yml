@@ -1,0 +1,21 @@
+language: go
+
+sudo: false
+
+go: 1.7
+
+install: make deps
+
+script: make build
+
+deploy:
+  provider: releases
+  file:
+    - build/ec2-filter_darwin_amd64
+    - build/ec2-filter_linux_amd64
+    - build/SHA256SUMS
+  skip_cleanup: true
+  on:
+    tags: true
+  api_key:
+    secure: ah6gh1zSz5HIbJ2paz353DXa3MscgFE1bsidOAJwcmrImTvy99DkwNst1GMeYo/y/MEeWTx9EFLw25swZqTeZiVYd22rGvEVU4M4liJ77MhECB8PwyOFmV3nyeexjTg64XQlwvrmK6KgbCscQy0p6csWL2ZQiJU4A40pl9uD/jOXqO1DdkRcDkmGoU1ARfxS0Jtvh1cwcM9LlZ6cpKqg3l71LdSqUMpxUg1BELvQ1yi5op+OY81jwoiUnFE42um6iJwOrAhlXAoCd8uhe8U0mDfQi68fmyXbVtxYC+k2a3Cu2U8TKqjQEUAeutz/qZJ2a7zT+0UT49hUg9tBCyjnHOLRdDT2Q8ug7D8yKPYrt8g4sat6leaK59EFvxpMml7YLNFGzM9K/ic9ENqKrrlvZezOwxlhONVQUiERMncv3cRwSljFHEYDFptB1s+Rxul/wyONY9DF07iuk/5GXWXui5GDb6U0WFsQDOIDafZZiXjCqjnXYaGwkECvt4cwZJkUNDwWfqCSdOT1MiWedMhNWB1gPwouVJZ5TgB03TL5lRc8bMeVe/5QBn8HReTuFChU2f9NdB7P7xCLSZ8Re/JBZ8/3EntTt/d4BQppi7qGNy2HE+SlaiMchqCiJs+ozKpQdagL19sWfsQgiafCfUqBCZWBcFC7OBOleAWRGB2GjT0=
