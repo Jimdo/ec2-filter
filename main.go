@@ -33,6 +33,7 @@ func main() {
 		showPrivateIP  = flag.Bool("private-ip", false, "show private IP address")
 		showPublicDNS  = flag.Bool("public-dns", false, "show public DNS name")
 		showPublicIP   = flag.Bool("public-ip", false, "show public IP address")
+		region         = flag.String("region", "", "set AWS region")
 
 		format = flag.String("format", "{{.PrivateIpAddress}}", "alternate format in Go template syntax")
 		join   = flag.String("join", "\n", "separator string for concatenating results")
@@ -71,7 +72,7 @@ func main() {
 		filters[parts[0]] = parts[1]
 	}
 
-	instances, err := findInstances(filters)
+	instances, err := findInstances(filters, *region)
 	if err != nil {
 		abort("%s", err)
 	}
@@ -107,7 +108,7 @@ func main() {
 	}
 }
 
-func findInstances(filters map[string]string) ([]EC2Instance, error) {
+func findInstances(filters map[string]string, region string) ([]EC2Instance, error) {
 	var ec2Filters []*ec2.Filter
 	for k, v := range filters {
 		ec2Filters = append(ec2Filters, &ec2.Filter{
@@ -132,16 +133,22 @@ func findInstances(filters map[string]string) ([]EC2Instance, error) {
 		return !last
 	}
 
-	svc := ec2.New(sessionWithTimeout(30 * time.Second))
+	config := aws.NewConfig().WithHTTPClient(&http.Client{Timeout: 30 * time.Second})
+	if region != "" {
+		config.WithRegion(region)
+	}
+
+	sess, err := session.NewSession(config)
+	if err != nil {
+		return nil, err
+	}
+
+	svc := ec2.New(sess)
 	if err := svc.DescribeInstancesPages(&ec2.DescribeInstancesInput{Filters: ec2Filters}, fn); err != nil {
 		return nil, err
 	}
 
 	return instances, nil
-}
-
-func sessionWithTimeout(timeout time.Duration) *session.Session {
-	return session.New(aws.NewConfig().WithHTTPClient(&http.Client{Timeout: timeout}))
 }
 
 func abort(format string, a ...interface{}) {
