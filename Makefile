@@ -7,7 +7,7 @@ lint:
 	go vet ./...
 
 deps:
-	go get -d -t ./...
+	go mod tidy
 
 build: test lint clean
 	GOOS=darwin GOARCH=amd64 go build -o build/ec2-filter_darwin_amd64
